@@ -1,0 +1,4 @@
+#!/bin/sh
+
+./gradlew bootJar
+java -jar build/libs/admin-server*.jar

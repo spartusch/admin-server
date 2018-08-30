@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Copy this file to .git/hooks to enable this post-receive hook
+
+project_name='admin-server'
+deploy_dir='/home/pi/deploy/admin-server'
+repo_dir='/home/pi/repos/admin-server.git'
+server_port=18000
+
+while read oldrev newrev ref
+do
+    if [[ $ref =~ .*/master$ ]];
+    then
+        echo "=> Deploying master branch..."
+		git --work-tree=$deploy_dir --git-dir=$repo_dir checkout -f
+
+		echo
+		pid=$(ps aux | egrep '[j]ava .+/'$project_name'.*\.jar' | awk '{print $2}')
+		if [ -z $pid ];
+		then
+			echo "=> No running instance detected";
+		else
+			echo "=> Killing running instance (pid: $pid)...";
+			kill $pid
+		fi
+
+		echo
+		echo "=> Building deployed master branch..."
+		$deploy_dir/gradlew -p $deploy_dir clean bootJar
+
+		echo
+		jar_file=$deploy_dir/build/libs/$project_name*.jar
+		echo "=> Starting new instance ("$(basename $jar_file)") on port $server_port..."
+		nohup java -Dserver.port=$server_port -jar $jar_file &>$deploy_dir/output &
+
+		echo "=> Done"
+    else
+        echo "Ref $ref received successfully. Doing nothing: only the master branch will be deployed on this server."
+    fi
+done

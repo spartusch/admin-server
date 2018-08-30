@@ -1,0 +1,4 @@
+
+server.port: 18000
+
+spring.application.name: admin-server
