@@ -5,6 +5,7 @@
 project_name='admin-server'
 deploy_dir='/home/pi/deploy/admin-server'
 repo_dir='/home/pi/repos/admin-server.git'
+network='com.github.spartusch'
 server_port=18000
 
 while read oldrev newrev ref
@@ -30,7 +31,7 @@ do
 		    && echo && echo "=> Starting new container on port $server_port..." \
             && docker run -p$server_port:$server_port \
                       -e SERVER_PORT=$server_port \
-                      -d --rm --name $project_name $project_name':latest'
+                      -d --rm --network $network --name $project_name $project_name':latest'
 
         echo
         echo "=> Cleaning up...";
