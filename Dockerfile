@@ -1,8 +1,8 @@
 FROM gradle:4.10-jdk10-slim
 
-ADD src src
-ADD build.gradle .
 ADD settings.gradle .
+ADD build.gradle .
+ADD src src
 RUN gradle build
 
 FROM openjdk:10-jre-slim
