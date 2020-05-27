@@ -1,26 +1,5 @@
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-/out/
+# Ignore everything
+**
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-# Mac
-.DS_Store
-
-# Maven
-log/
-target/
-build/
-
-# Gradle
-.gradle/
-
-*.log
+# Except the following
+! build/libs/*.jar

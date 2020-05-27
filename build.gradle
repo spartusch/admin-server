@@ -1,39 +1,39 @@
-buildscript {
-	ext {
-		springBootVersion = '2.0.4.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.3.0.RELEASE'
+	id "io.spring.dependency-management" version "1.0.9.RELEASE"
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+ext {
+	springBootAdminVersion = '2.2.3'
+}
 
 group = 'com.github.spartusch'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+version = '0.1.0-SNAPSHOT'
+
+sourceCompatibility = 11
 
 repositories {
 	mavenCentral()
 }
 
-ext {
-	springBootAdminVersion = '2.0.2'
-}
-
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('de.codecentric:spring-boot-admin-starter-server')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation("de.codecentric:spring-boot-admin-starter-server:${springBootAdminVersion}")
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
-	}
+test {
+	useJUnitPlatform()
+}
+
+bootJar {
+	launchScript()
+}
+
+task dockerImage(type: Exec, dependsOn: bootJar) {
+	def name = "${project.group}/${project.name}"
+	commandLine = ['docker', 'image', 'build', '-t', "$name:${project.version}", '-t', "$name:latest", '.']
 }
