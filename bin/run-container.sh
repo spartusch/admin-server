@@ -18,7 +18,7 @@ if [ -z $container_id ];
 fi
 
 echo "=> Building image '$project_group/$project_name' (might take a while) ..."
-./gradlew dockerImage > /dev/null
+docker image build -t $project_group'/'$project_name':latest' .
 echo
 
 if [[ ! $(docker network ls | grep $project_group) ]];
@@ -35,11 +35,6 @@ echo "=> Starting new container '$project_name' to be available at port $port ..
 docker run -p$port:8080 \
   -d --network $project_group --name $project_name \
   $project_group'/'$project_name':latest' > /dev/null
-
-echo
-echo "=> Cleaning up ...";
-echo
-docker system prune -f > /dev/null
 
 echo "=> Done"
 echo
