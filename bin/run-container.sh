@@ -33,7 +33,7 @@ fi
 
 echo "=> Starting new container '$project_name' to be available at port $port ..."
 docker run -p$port:8080 \
-  -d --network $project_group --name $project_name \
+  -d --network $project_group --name $project_name --restart unless-stopped \
   $project_group'/'$project_name':latest' > /dev/null
 
 echo "=> Done"
