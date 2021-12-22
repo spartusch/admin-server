@@ -1,4 +1,4 @@
 #!/bin/sh
 
-./gradlew bootJar
+./gradlew -PgenerateLaunchScript bootJar
 ./build/libs/*.jar
