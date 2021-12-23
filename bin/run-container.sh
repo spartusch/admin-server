@@ -1,6 +1,7 @@
 #!/bin/bash
 
 declare $(env -i `cat bin/configuration.vars`)
+declare $(env -i `cat bin/secrets.vars`)
 
 echo
 echo "=> Starting to build and run '$project_group/$project_name' ..."
@@ -33,6 +34,8 @@ fi
 
 echo "=> Starting new container '$project_name' to be available at port $port ..."
 docker run -p$port:8080 \
+  -e ADMIN_USER=$admin_user \
+  -e ADMIN_PASSWORD=$admin_password \
   -d --network $project_group --name $project_name --restart unless-stopped \
   $project_group'/'$project_name':latest' > /dev/null
 

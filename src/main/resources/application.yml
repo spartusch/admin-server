@@ -1,4 +1,9 @@
 
 server.port: 18000
 
-spring.application.name: admin-server
+spring:
+  application.name: admin-server
+  security:
+    user:
+      name: ${ADMIN_USER}
+      password: ${ADMIN_PASSWORD}
